@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вика и ПЭПЭ</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: sans-serif;
+            overflow: hidden; /* Запрещаем скролл */
+            
+            /* НОВАЯ ТЕМА: Тёплый фоновый цвет */
+            background-color: #fff5ee; /* Цвет морской раковины */
+            
+            /* НОВЫЙ ФОН: Паттерн из 🤟 */
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Ctext x='10' y='55' font-size='40'%3E🤟%3C/text%3E%3C/svg%3E");
+        }
+
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            /* Тень теперь кораллового цвета */
+            box-shadow: 0 10px 25px rgba(255, 99, 71, 0.3);
+            max-width: 400px;
+            width: 90%;
+            position: relative;
+            z-index: 10;
+        }
+
+        .photo-frame {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            overflow: hidden;
+            /* Рамка кораллового цвета */
+            border: 5px solid #ff6347;
+        }
+
+        .photo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        h1 {
+            /* Цвет заголовка коралловый */
+            color: #ff6347;
+            margin-bottom: 30px;
+            font-size: 24px;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            height: 50px;
+        }
+
+        button {
+            padding: 10px 30px;
+            font-size: 18px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        #yesBtn {
+            background-color: #28a745;
+            color: white;
+            box-shadow: 0 4px 10px rgba(40, 167, 69, 0.3);
+            transition: transform 0.2s;
+        }
+        #yesBtn:hover {
+            transform: scale(1.1);
+        }
+
+        #noBtn {
+            background-color: #dc3545;
+            color: white;
+            box-shadow: 0 4px 10px rgba(220, 53, 69, 0.3);
+            z-index: 9999; 
+        }
+
+        /* Модальное окно */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            /* Рамка модалки коралловая */
+            border: 4px solid #ff6347;
+            max-width: 80%;
+        }
+
+        .modal-content img {
+            max-width: 100%;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="photo-frame">
+            <img src="photo.jpeg" alt="Фото">
+        </div>
+        
+        <h1>Вика любит пэпэ?</h1>
+        
+        <div class="buttons">
+            <button id="yesBtn">Да</button>
+            <button id="noBtn">Нет</button>
+        </div>
+    </div>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <h2 style="color: #ff6347;">ВИКА ЛЮБИТ ПЭПЭ! 🤟</h2>
+            <p>Я так и знал!</p>
+            <img src="https://media.giphy.com/media/TdfyKrN7HGTIY/giphy.gif" alt="Ура">
+        </div>
+    </div>
+
+    <script>
+        const noBtn = document.getElementById('noBtn');
+        const yesBtn = document.getElementById('yesBtn');
+        const modal = document.getElementById('modal');
+
+        // Функция перемещения
+        function moveButton() {
+            const windowW = window.innerWidth;
+            const windowH = window.innerHeight;
+            const btnW = noBtn.offsetWidth;
+            const btnH = noBtn.offsetHeight;
+
+            // Максимальные координаты
+            const maxX = windowW - btnW;
+            const maxY = windowH - btnH;
+
+            const randomX = Math.random() * maxX;
+            const randomY = Math.random() * maxY;
+
+            noBtn.style.position = 'fixed';
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
+        }
+
+        // --- СОБЫТИЯ ---
+        noBtn.addEventListener('mouseover', moveButton);
+        noBtn.addEventListener('click', function(e) { moveButton(); });
+        noBtn.addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            moveButton();
+        });
+
+        yesBtn.addEventListener('click', function() {
+            modal.style.display = 'flex';
+        });
+
+        modal.addEventListener('click', function() {
+            modal.style.display = 'none';
+        });
+    </script>
+</body>
+</html>
