@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Вика и ПЭПЭ</title>
+    <title>Для тебя ❤️</title>
     <style>
+        /* Основной стиль страницы и фон с пионами */
         body {
             margin: 0;
             padding: 0;
@@ -12,179 +13,162 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            font-family: sans-serif;
-            overflow: hidden; /* Запрещаем скролл */
-            
-            /* НОВАЯ ТЕМА: Тёплый фоновый цвет */
-            background-color: #fff5ee; /* Цвет морской раковины */
-            
-            /* НОВЫЙ ФОН: Паттерн из 🤟 */
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Ctext x='10' y='55' font-size='40'%3E🤟%3C/text%3E%3C/svg%3E");
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-image: url('https://images.unsplash.com/photo-1583483425010-c566431a7710?auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
         }
 
-        .container {
-            text-align: center;
-            background: rgba(255, 255, 255, 0.95);
+        /* Темное затемнение для фона, чтобы контент читался лучше */
+        .overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: 1;
+        }
+
+        /* Контейнер с контентом по центру */
+        .content-box {
+            position: relative;
+            z-index: 2;
+            background: rgba(255, 255, 255, 0.85);
             padding: 40px;
             border-radius: 20px;
-            /* Тень теперь кораллового цвета */
-            box-shadow: 0 10px 25px rgba(255, 99, 71, 0.3);
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
             max-width: 400px;
             width: 90%;
-            position: relative;
-            z-index: 10;
         }
 
-        .photo-frame {
-            width: 150px;
-            height: 150px;
-            margin: 0 auto 20px;
-            border-radius: 50%;
-            overflow: hidden;
-            /* Рамка кораллового цвета */
-            border: 5px solid #ff6347;
-        }
-
-        .photo-frame img {
+        /* Красивая картинка в центре */
+        .main-image {
             width: 100%;
-            height: 100%;
-            object-fit: cover;
+            height: auto;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
         }
 
-        h1 {
-            /* Цвет заголовка коралловый */
-            color: #ff6347;
-            margin-bottom: 30px;
-            font-size: 24px;
+        /* Текст */
+        .instruction {
+            font-size: 20px;
+            color: #4a4a4a;
+            margin-bottom: 20px;
+            font-weight: 500;
         }
 
-        .buttons {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            height: 50px;
-        }
-
-        button {
-            padding: 10px 30px;
-            font-size: 18px;
+        /* Кнопочка */
+        .magic-btn {
+            background: linear-gradient(45deg, #ff758c 0%, #ff7eb3 100%);
+            color: white;
             border: none;
-            border-radius: 50px;
-            cursor: pointer;
+            padding: 15px 30px;
+            font-size: 18px;
             font-weight: bold;
-            white-space: nowrap;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 117, 140, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
         }
 
-        #yesBtn {
-            background-color: #28a745;
-            color: white;
-            box-shadow: 0 4px 10px rgba(40, 167, 69, 0.3);
-            transition: transform 0.2s;
-        }
-        #yesBtn:hover {
-            transform: scale(1.1);
+        .magic-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(255, 117, 140, 0.6);
         }
 
-        #noBtn {
-            background-color: #dc3545;
-            color: white;
-            box-shadow: 0 4px 10px rgba(220, 53, 69, 0.3);
-            z-index: 9999; 
-        }
-
-        /* Модальное окно */
+        /* Стили для всплывающего окна (модалки) */
         .modal {
-            display: none;
+            display: none; 
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.5);
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 10;
             justify-content: center;
             align-items: center;
-            z-index: 10000;
+            animation: fadeIn 0.4s ease-out;
         }
 
         .modal-content {
-            background: white;
-            padding: 30px;
+            background: #fff;
+            padding: 50px;
             border-radius: 20px;
             text-align: center;
-            /* Рамка модалки коралловая */
-            border: 4px solid #ff6347;
-            max-width: 80%;
+            position: relative;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            background: linear-gradient(135deg, #fffafb 0%, #fdf3f6 100%);
         }
 
-        .modal-content img {
-            max-width: 100%;
-            border-radius: 10px;
-            margin-top: 15px;
+        .modal h1 {
+            color: #ff4b72;
+            font-size: 36px;
+            margin: 0;
+            font-family: 'Georgia', serif;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        /* Крестик для закрытия */
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 28px;
+            color: #aaa;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .close-btn:hover {
+            color: #ff4b72;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="photo-frame">
-            <img src="photo.jpeg" alt="Фото">
-        </div>
+    <div class="overlay"></div>
+
+    <div class="content-box">
+        <img src="https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=800&q=80" alt="Красивые цветы" class="main-image">
         
-        <h1>Вика любит пэпэ?</h1>
-        
-        <div class="buttons">
-            <button id="yesBtn">Да</button>
-            <button id="noBtn">Нет</button>
-        </div>
+        <div class="instruction">Нажми на кнопочку ✨</div>
+        <button class="magic-btn" id="openModalBtn">Узнать секрет</button>
     </div>
 
-    <div id="modal" class="modal">
+    <div class="modal" id="myModal">
         <div class="modal-content">
-            <h2 style="color: #ff6347;">ВИКА ЛЮБИТ ПЭПЭ! 🤟</h2>
-            <p>Я так и знал!</p>
-            <img src="https://media.giphy.com/media/TdfyKrN7HGTIY/giphy.gif" alt="Ура">
+            <span class="close-btn" id="closeModalBtn">&times;</span>
+            <h1>Ты прекрасна! 🌸</h1>
         </div>
     </div>
 
     <script>
-        const noBtn = document.getElementById('noBtn');
-        const yesBtn = document.getElementById('yesBtn');
-        const modal = document.getElementById('modal');
+        // Получаем элементы
+        const modal = document.getElementById("myModal");
+        const btn = document.getElementById("openModalBtn");
+        const closeBtn = document.getElementById("closeModalBtn");
 
-        // Функция перемещения
-        function moveButton() {
-            const windowW = window.innerWidth;
-            const windowH = window.innerHeight;
-            const btnW = noBtn.offsetWidth;
-            const btnH = noBtn.offsetHeight;
-
-            // Максимальные координаты
-            const maxX = windowW - btnW;
-            const maxY = windowH - btnH;
-
-            const randomX = Math.random() * maxX;
-            const randomY = Math.random() * maxY;
-
-            noBtn.style.position = 'fixed';
-            noBtn.style.left = randomX + 'px';
-            noBtn.style.top = randomY + 'px';
+        // Открываем окно при нажатии на кнопку
+        btn.onclick = function() {
+            modal.style.display = "flex";
         }
 
-        // --- СОБЫТИЯ ---
-        noBtn.addEventListener('mouseover', moveButton);
-        noBtn.addEventListener('click', function(e) { moveButton(); });
-        noBtn.addEventListener('touchstart', function(e) {
-            e.preventDefault();
-            moveButton();
-        });
+        // Закрываем окно при нажатии на крестик
+        closeBtn.onclick = function() {
+            modal.style.display = "none";
+        }
 
-        yesBtn.addEventListener('click', function() {
-            modal.style.display = 'flex';
-        });
-
-        modal.addEventListener('click', function() {
-            modal.style.display = 'none';
-        });
+        // Закрываем окно при клике вне его области
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
     </script>
 </body>
 </html>
