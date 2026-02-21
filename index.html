@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Для тебя ❤️</title>
+    <title>Весеннее настроение для тебя ❤️</title>
     <style>
-        /* Основной стиль страницы и фон с пионами */
+        /* Основной стиль страницы и фон с весной */
         body {
             margin: 0;
             padding: 0;
@@ -14,17 +14,18 @@
             justify-content: center;
             align-items: center;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-image: url('https://images.unsplash.com/photo-1583483425010-c566431a7710?auto=format&fit=crop&w=1920&q=80');
+            /* Ссылка на весенний фон (цветущий сад) */
+            background-image: url('https://images.unsplash.com/photo-1493687790129-b75553529a38?auto=format&fit=crop&w=1920&q=80');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
         }
 
-        /* Темное затемнение для фона, чтобы контент читался лучше */
+        /* Затемнение фона для контраста */
         .overlay {
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0, 0, 0, 0.3);
+            background: rgba(0, 0, 0, 0.2); /* Легкое затемнение */
             z-index: 1;
         }
 
@@ -32,50 +33,51 @@
         .content-box {
             position: relative;
             z-index: 2;
-            background: rgba(255, 255, 255, 0.85);
+            background: rgba(255, 255, 255, 0.9); /* Более белый фон блока */
             padding: 40px;
             border-radius: 20px;
             text-align: center;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(5px);
             max-width: 400px;
             width: 90%;
+            border: 1px solid rgba(255, 255, 255, 0.5);
         }
 
-        /* Красивая картинка в центре */
+        /* Картинка пиона в центре */
         .main-image {
             width: 100%;
             height: auto;
             border-radius: 15px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
-        /* Текст */
+        /* Текст инструкции */
         .instruction {
-            font-size: 20px;
-            color: #4a4a4a;
-            margin-bottom: 20px;
+            font-size: 22px;
+            color: #333;
+            margin-bottom: 25px;
             font-weight: 500;
         }
 
-        /* Кнопочка */
+        /* Стиль кнопки */
         .magic-btn {
-            background: linear-gradient(45deg, #ff758c 0%, #ff7eb3 100%);
+            background: linear-gradient(45deg, #ff85a2 0%, #ffacba 100%); /* Нежно-розовый градиент */
             color: white;
             border: none;
-            padding: 15px 30px;
+            padding: 15px 35px;
             font-size: 18px;
             font-weight: bold;
-            border-radius: 30px;
+            border-radius: 50px;
             cursor: pointer;
-            box-shadow: 0 5px 15px rgba(255, 117, 140, 0.4);
-            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 5px 15px rgba(255, 133, 162, 0.4);
+            transition: all 0.3s ease;
         }
 
         .magic-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 8px 20px rgba(255, 117, 140, 0.6);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(255, 133, 162, 0.6);
         }
 
         /* Стили для всплывающего окна (модалки) */
@@ -83,26 +85,28 @@
             display: none; 
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 10;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 100;
             justify-content: center;
             align-items: center;
-            animation: fadeIn 0.4s ease-out;
+            animation: fadeInBackground 0.4s ease-out;
         }
 
         .modal-content {
             background: #fff;
-            padding: 50px;
-            border-radius: 20px;
+            padding: 60px 40px;
+            border-radius: 25px;
             text-align: center;
             position: relative;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-            background: linear-gradient(135deg, #fffafb 0%, #fdf3f6 100%);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            background: linear-gradient(135deg, #fff 0%, #fff0f5 100%);
+            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Эффект пружинки при появлении */
+            max-width: 90%;
         }
 
         .modal h1 {
-            color: #ff4b72;
-            font-size: 36px;
+            color: #e91e63; /* Яркий розовый цвет текста */
+            font-size: 42px;
             margin: 0;
             font-family: 'Georgia', serif;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
@@ -113,19 +117,25 @@
             position: absolute;
             top: 15px;
             right: 20px;
-            font-size: 28px;
-            color: #aaa;
+            font-size: 32px;
+            color: #ccc;
             cursor: pointer;
             transition: color 0.2s;
+            line-height: 1;
         }
 
         .close-btn:hover {
-            color: #ff4b72;
+            color: #e91e63;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* Анимации */
+        @keyframes fadeInBackground {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes popIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
         }
     </style>
 </head>
@@ -134,7 +144,7 @@
     <div class="overlay"></div>
 
     <div class="content-box">
-        <img src="https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=800&q=80" alt="Красивые цветы" class="main-image">
+        <img src="https://images.unsplash.com/photo-1563241527-3004b7be0248?auto=format&fit=crop&w=800&q=80" alt="Прекрасный пион" class="main-image">
         
         <div class="instruction">Нажми на кнопочку ✨</div>
         <button class="magic-btn" id="openModalBtn">Узнать секрет</button>
