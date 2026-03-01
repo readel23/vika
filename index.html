@@ -3,183 +3,266 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Весеннее настроение для тебя ❤️</title>
+    <title>The Chaos Gallery v2.0 - Total Shock</title>
     <style>
-        /* Основной стиль страницы и фон с весной */
-        body {
-            margin: 0;
-            padding: 0;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            /* Ссылка на весенний фон (цветущий сад) */
-            background-image: url('https://img.freepik.com/premium-photo/trees-field-against-sky_1048944-1574103.jpg?semt=ais_hybrid&w=740&q=80');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background-color: #000; overflow: hidden; height: 100vh; color: white; font-family: sans-serif; }
+        canvas { position: absolute; top: 0; left: 0; }
+        
+        /* Глобальный пост-эффект сияния (Bloom) */
+        #canvas {
+            filter: blur(0.5px) contrast(1.2) drop-shadow(0 0 15px rgba(0, 255, 255, 0.7));
         }
 
-        /* Затемнение фона для контраста */
-        .overlay {
+        /* Текстовые подсказки сверху */
+        #ui {
             position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0, 0, 0, 0.2); /* Легкое затемнение */
-            z-index: 1;
-        }
-
-        /* Контейнер с контентом по центру */
-        .content-box {
-            position: relative;
-            z-index: 2;
-            background: rgba(255, 255, 255, 0.9); /* Более белый фон блока */
-            padding: 40px;
-            border-radius: 20px;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
             text-align: center;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            backdrop-filter: blur(5px);
-            max-width: 400px;
-            width: 90%;
-            border: 1px solid rgba(255, 255, 255, 0.5);
-        }
-
-        /* Картинка пиона в центре */
-        .main-image {
-            width: 100%;
-            height: auto;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            margin-bottom: 25px;
-        }
-
-        /* Текст инструкции */
-        .instruction {
-            font-size: 22px;
-            color: #333;
-            margin-bottom: 25px;
-            font-weight: 500;
-        }
-
-        /* Стиль кнопки */
-        .magic-btn {
-            background: linear-gradient(45deg, #ff85a2 0%, #ffacba 100%); /* Нежно-розовый градиент */
-            color: white;
-            border: none;
-            padding: 15px 35px;
-            font-size: 18px;
-            font-weight: bold;
-            border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 0 5px 15px rgba(255, 133, 162, 0.4);
-            transition: all 0.3s ease;
-        }
-
-        .magic-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(255, 133, 162, 0.6);
-        }
-
-        /* Стили для всплывающего окна (модалки) */
-        .modal {
-            display: none; 
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0, 0, 0, 0.6);
-            z-index: 100;
-            justify-content: center;
-            align-items: center;
-            animation: fadeInBackground 0.4s ease-out;
-        }
-
-        .modal-content {
-            background: #fff;
-            padding: 60px 40px;
-            border-radius: 25px;
-            text-align: center;
-            position: relative;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
-            background: linear-gradient(135deg, #fff 0%, #fff0f5 100%);
-            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Эффект пружинки при появлении */
-            max-width: 90%;
-        }
-
-        .modal h1 {
-            color: #e91e63; /* Яркий розовый цвет текста */
-            font-size: 42px;
-            margin: 0;
-            font-family: 'Georgia', serif;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-        }
-
-        /* Крестик для закрытия */
-        .close-btn {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            font-size: 32px;
-            color: #ccc;
-            cursor: pointer;
-            transition: color 0.2s;
-            line-height: 1;
-        }
-
-        .close-btn:hover {
-            color: #e91e63;
-        }
-
-        /* Анимации */
-        @keyframes fadeInBackground {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        @keyframes popIn {
-            from { opacity: 0; transform: scale(0.8); }
-            to { opacity: 1; transform: scale(1); }
+            pointer-events: none; /* Чтобы мышь проходила насквозь к канвасу */
+            z-index: 10;
+            opacity: 0.6;
+            font-size: 14px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
         }
     </style>
 </head>
 <body>
 
-    <div class="overlay"></div>
+<div id="ui">Кликни для смены. Зажми для вихря.</div>
+<canvas id="canvas"></canvas>
 
-    <div class="content-box">
-        <img src="https://i.pinimg.com/736x/18/b6/f1/18b6f1533807c28d4d4099ae23279632.jpg" alt="Прекрасный пион" class="main-image">
+<script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d', { willReadFrequently: true });
+    
+    // Настройки производительности и визуала
+    const P_DENSITY = 6; // Шаг сканирования пикселей (чем меньше, тем больше частиц и тормознее)
+    const MAX_PARTICLES = 15000; // Лимит, чтобы браузер не умер
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let particleArray = [];
+    let mouse = { x: null, y: null, radius: 120, pressed: false };
+    
+    // Список слов для морфинга
+    const words = ["ВИКА", "ХАЙП", "ПЭПЭ?", "11/10"];
+    let currentWordIndex = 0;
+
+    window.addEventListener('mousemove', e => { mouse.x = e.x; mouse.y = e.y; });
+    window.addEventListener('mousedown', () => { mouse.pressed = true; });
+    window.addEventListener('mouseup', () => { mouse.pressed = false; });
+    window.addEventListener('click', changeWord);
+
+    // Класс частицы с прокачанной физикой
+    class Particle {
+        constructor(x, y) {
+            this.x = Math.random() * canvas.width; // Появляются в случайном месте
+            this.y = Math.random() * canvas.height;
+            this.baseX = x; // Целевая позиция (из текста)
+            this.baseY = y;
+            
+            this.size = 1.5;
+            
+            // Физические свойства
+            this.vx = (Math.random() - 0.5) * 10; // Текущая скорость X
+            this.vy = (Math.random() - 0.5) * 10; // Текущая скорость Y
+            this.accelX = 0; // Ускорение
+            this.accelY = 0;
+            this.friction = 0.92; // Трение (затухание скорости)
+            this.returnForce = 0.05; // Сила возврата домой
+            
+            this.mass = Math.random() * 20 + 1; // "Тяжесть" частицы
+            
+            // Динамический цвет (базовый cyan)
+            this.h = 180; 
+        }
         
-        <div class="instruction">Нажми на кнопочку ✨</div>
-        <button class="magic-btn" id="openModalBtn">Узнать секрет</button>
-    </div>
-
-    <div class="modal" id="myModal">
-        <div class="modal-content">
-            <span class="close-btn" id="closeModalBtn">&times;</span>
-            <h1>Ты прекрасна! 🌸</h1>
-        </div>
-    </div>
-
-    <script>
-        // Получаем элементы
-        const modal = document.getElementById("myModal");
-        const btn = document.getElementById("openModalBtn");
-        const closeBtn = document.getElementById("closeModalBtn");
-
-        // Открываем окно при нажатии на кнопку
-        btn.onclick = function() {
-            modal.style.display = "flex";
+        draw() {
+            // Эффект "накаливания": чем быстрее летит, тем белее и ярче
+            let speed = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
+            let brightness = Math.min(50 + speed * 10, 100);
+            let hue = this.h - speed * 5; // Сдвиг цвета при скорости (в фиолетовый)
+            
+            ctx.fillStyle = `hsl(${hue}, 100%, ${brightness}%)`;
+            
+            // Рисуем не просто круг, а чуть вытянутый по вектору скорости (motion blur)
+            ctx.beginPath();
+            if (speed < 1) {
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            } else {
+                ctx.lineWidth = this.size;
+                ctx.moveTo(this.x, this.y);
+                ctx.lineTo(this.x - this.vx * 0.5, this.y - this.vy * 0.5);
+                ctx.strokeStyle = ctx.fillStyle;
+                ctx.stroke();
+            }
+            ctx.fill();
         }
+        
+        update() {
+            // Reset accelerations
+            this.accelX = 0;
+            this.accelY = 0;
 
-        // Закрываем окно при нажатии на крестик
-        closeBtn.onclick = function() {
-            modal.style.display = "none";
+            // 1. Сила возврата на базовую позицию (как пружина)
+            let dy_home = this.baseY - this.y;
+            let dx_home = this.baseX - this.x;
+            this.accelX += dx_home * this.returnForce;
+            this.accelY += dy_home * this.returnForce;
+
+            // 2. Взаимодействие с мышью
+            let dx_mouse = mouse.x - this.x;
+            let dy_mouse = mouse.y - this.y;
+            let dist_mouse = Math.sqrt(dx_mouse * dx_mouse + dy_mouse * dy_mouse);
+
+            if (dist_mouse < mouse.radius) {
+                let force = (mouse.radius - dist_mouse) / mouse.radius; // 0 to 1
+                
+                if (mouse.pressed) {
+                    // РЕЖИМ ВИХРЯ (Гравитация + Вращение)
+                    let angle = Math.atan2(dy_mouse, dx_mouse);
+                    // Тянет к центру
+                    this.accelX += Math.cos(angle) * force * 2 * this.mass;
+                    this.accelY += Math.sin(angle) * force * 2 * this.mass;
+                    // Закручивает (перпендикулярная сила)
+                    this.accelX += Math.cos(angle + Math.PI/2) * force * 5 * this.mass;
+                    this.accelY += Math.sin(angle + Math.PI/2) * force * 5 * this.mass;
+                } else {
+                    // РЕЖИМ ОТТАЛКИВАНИЯ (Плавный)
+                    let angle = Math.atan2(dy_mouse, dx_mouse);
+                    this.accelX -= Math.cos(angle) * force * 1.5 * this.mass;
+                    this.accelY -= Math.sin(angle) * force * 1.5 * this.mass;
+                }
+            }
+
+            // 3. Интеграция физики
+            this.vx += this.accelX / this.mass;
+            this.vy += this.accelY / this.mass;
+            this.vx *= this.friction;
+            this.vy *= this.friction;
+            
+            this.x += this.vx;
+            this.y += this.vy;
         }
+    }
 
-        // Закрываем окно при клике вне его области
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
+    // Функция считывания координат текста
+    function getTextCoordinates(text) {
+        let coords = [];
+        const fontSize = Math.min(canvas.width * 0.25, 400); // Адаптивный шрифт
+        ctx.fillStyle = 'white';
+        ctx.font = `bold ${fontSize}px sans-serif`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        
+        // Очистка и написание текста
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillText(text, canvas.width / 2, canvas.height / 2);
+        
+        const textData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        ctx.clearRect(0, 0, canvas.width, canvas.height); // Сразу чистим
+
+        // Сканирование
+        for (let y = 0; y < canvas.height; y += P_DENSITY) {
+            for (let x = 0; x < canvas.width; x += P_DENSITY) {
+                // Если пиксель не прозрачный
+                if (textData.data[(y * 4 * canvas.width) + (x * 4) + 3] > 128) {
+                    coords.push({x: x, y: y});
+                }
             }
         }
-    </script>
+        return coords;
+    }
+
+    // Инициализация (самая первая)
+    function init() {
+        particleArray = [];
+        let coords = getTextCoordinates(words[currentWordIndex]);
+        
+        // Ограничиваем количество, если текст слишком жирный
+        let count = Math.min(coords.length, MAX_PARTICLES);
+        
+        for (let i = 0; i < count; i++) {
+            particleArray.push(new Particle(coords[i].x, coords[i].y));
+        }
+    }
+
+    // Логика МОРФИНГА при клике
+    function changeWord() {
+        currentWordIndex = (currentWordIndex + 1) % words.length;
+        let newCoords = getTextCoordinates(words[currentWordIndex]);
+        
+        // Главная фишка: мы не создаем новые частицы `new Particle()`.
+        // Мы берем СТАРЫЕ частицы и меняем им `baseX/baseY` (дом).
+        // Физика сама плавно перенесет их туда.
+        
+        let pCount = particleArray.length;
+        let cCount = newCoords.length;
+
+        // Если в новом слове точек больше -> добавляем недостающие
+        if (cCount > pCount) {
+            for (let i = pCount; i < cCount; i++) {
+                if (particleArray.length < MAX_PARTICLES) {
+                    particleArray.push(new Particle(newCoords[i].x, newCoords[i].y));
+                }
+            }
+        }
+        
+        // Переназначаем дома для всех частиц
+        for (let i = 0; i < particleArray.length; i++) {
+            // Используем оператор остатка, чтобы если частиц больше, чем координат, 
+            // они распределились по кругу заново
+            let coord = newCoords[i % cCount];
+            particleArray[i].baseX = coord.x;
+            particleArray[i].baseY = coord.y;
+            
+            // Даем легкий пинок, чтобы морфинг начался хаотично
+            particleArray[i].vx += (Math.random() - 0.5) * 20;
+            particleArray[i].vy += (Math.random() - 0.5) * 20;
+        }
+        
+        // Если в новом слове точек сильно меньше, лишние можно было бы удалить,
+        // но круче оставить их летать хаотично вокруг (эффект Хаоса).
+    }
+
+    init();
+
+    // Цикл анимации с ТРЕЙЛАМИ (Шлейфами)
+    function animate() {
+        // СЕКРЕТ ШЛЕЙФОВ: 
+        // Вместо полной очистки clearRect, мы рисуем полупрозрачный черный прямоугольник.
+        // Предыдущие кадры гаснут медленно.
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.15)'; // partial clear
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        // Чтобы частицы светились ярче, используем режим наложения
+        ctx.globalCompositeOperation = 'lighter'; 
+
+        for (let i = 0; i < particleArray.length; i++) {
+            particleArray[i].update();
+            particleArray[i].draw();
+        }
+        
+        // Возвращаем обычный режим, чтобы UI не светился
+        ctx.globalCompositeOperation = 'source-over';
+        requestAnimationFrame(animate);
+    }
+    
+    animate();
+
+    // Адаптив при ресайзе
+    window.addEventListener('resize', () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        // Пересоздаем, так как координаты текста привязаны к экрану
+        init(); 
+    });
+</script>
+
 </body>
 </html>
-
